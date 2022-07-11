@@ -28,7 +28,7 @@ function Loading(data) {
                 text.style.display = 'none'
             } else {
                 previousText = targetEl.firstChild.textContent
-                console.log(targetEl.firstChild.textContent = '')
+                targetEl.firstChild.textContent = ''
             }
         }
         
