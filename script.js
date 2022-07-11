@@ -17,7 +17,6 @@ function Loading(data) {
     let progress = 0
     let animateId;
 
-    // const upDown = (startX, distance, progress) =>  (startX +  (distance * Math.sin(progress * (Math.PI * 2)))).toFixed(3)
     const scaleEase = (startX, distance, progress) => (startX + (distance * Math.cos(progress * (Math.PI * 2)))).toFixed(3)
     const rubberBand = (startX, distance, progress) => (startX + (distance * Math.sin(progress * (Math.PI * 2))))
 
@@ -34,8 +33,9 @@ function Loading(data) {
         
         container.style.display = 'block'
         requestAnimationFrame(this.rotateCircles)
-
     } 
+
+    //4th stop animation
     this.clearRotation = function () {
         container.style.display = 'none'
         if(text) {
@@ -51,7 +51,7 @@ function Loading(data) {
     // 3rd animates circles
     this.rotateCircles = function (timestamp) {
         let index = circles.length
-        progress +=.007
+        progress +=.008
         while (index--) {
             const { el, x_start, x_offset, x_dist} = circles[index]
             const x = rubberBand(x_start, x_dist, progress + x_offset);
@@ -63,22 +63,23 @@ function Loading(data) {
         }
         animateId = requestAnimationFrame(this.rotateCircles)
     }.bind(this)
-   
+
     // 1st Creates the elements and adds necessary styles on page load (Helps with animation rendering)
     const createFragment = function () {
         const style = window.getComputedStyle(targetEl);
-        const extraPadding = ['padding-left', 'padding-right']
-        .map((key) => parseInt(style.getPropertyValue(key), 10))
+        const extraSizing = ['padding-left', 'padding-right', 'border-left', 'border-right']
+        .map((key) => parseInt(style.getPropertyValue(key), 10) || 0)
         .reduce((prev, cur) => prev + cur);
-        const containerWidth = targetEl.getBoundingClientRect().width - extraPadding
+
+        const containerWidth = targetEl.getBoundingClientRect().width - extraSizing
         const containerHeight = targetEl.getBoundingClientRect().height 
-        const circleWidth =  containerWidth / 8
-        const center = (containerWidth - (circleWidth * count)) 
+        const circleWidth =  containerWidth / (count + 2)
+        const xSpacing = (containerWidth / 2) - circleWidth / 2
 
         container = document.createElement('div')
         container.className = 'c-rotate'
 
-        for (let i = 1; i <= count; i++) {
+        for (let i = 0; i <= count; i++) {
             const circle = container.appendChild(document.createElement('div'));
             circle.style.width = circleWidth + 'px'
             circle.style.height = circleWidth + 'px'
@@ -87,10 +88,10 @@ function Loading(data) {
 
             circles.push({
                 el: circle,
-                x_offset: x_offset,
+                x_offset,
                 y_offset: 0,
-                x_start: center + circleWidth / 2,
-                x_dist: center 
+                x_start: xSpacing,
+                x_dist: xSpacing
             })
         }
 
