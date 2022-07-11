@@ -4,8 +4,8 @@
 * bring in the stylesheet.css
 * Or use both from cdn link:
 ```
-    <script src="https://cdn.jsdelivr.net/gh/bradicalone/loader@0.1.3/dist/index.min.js"></script> 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bradicalone/loader@latest/dist/stylesheet.css">
+    <script src="https://cdn.jsdelivr.net/gh/bradicalone/loader@0.1.5/dist/index.min.js"></script> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bradicalone/loader@0.1.5/dist/stylesheet.css">
 ```
 ## Usage
 
