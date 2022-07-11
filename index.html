@@ -6,9 +6,26 @@
     <meta name="description" content="Loader">
     <meta name="author" content="Brad Vanderbush">
     <link rel="stylesheet" type="text/css" href="assets/stylesheet.css">
+    <style>
+        .c-page-loader 
+            .is-loading {
+                padding: 12px;
+                width: 200px;
+                border-radius: 40px;
+                background: 0;
+                border: 2px solid #ffb063;
+                font-size: 21px;
+                transition: all 0.2s ease-out;
+                cursor: pointer;
+                color: #ffb063;
+                display: block;
+                margin: 1rem auto;
+                font-weight: 600;
+            }
+    </style>
     <script src="script.js" defer></script>
 </head>
-
+<!-- Testing purposes -->
 <body>
     <div class="c-page-loader">
         <!-- <div id="btn-loader" style="height: 500px; width: 100px; background-color: lightslategray;"></div> -->
@@ -19,7 +36,5 @@
         <button class="show-circles is-loading" id="btn-loader-two"><span id="loading-element-two">Loading...</span></button>
         <button class="show-circles is-loading" id="btn-loader-stop-two"><span>Stop</span></button>
     </div>
-    
 </body>
-
 </html>
