@@ -20,7 +20,7 @@ function Loading(data) {
   var circles = [],
       container;
   var progress = 0;
-  var animateId; // const upDown = (startX, distance, progress) =>  (startX +  (distance * Math.sin(progress * (Math.PI * 2)))).toFixed(3)
+  var animateId;
 
   var scaleEase = function scaleEase(startX, distance, progress) {
     return (startX + distance * Math.cos(progress * (Math.PI * 2))).toFixed(3);
@@ -43,7 +43,8 @@ function Loading(data) {
 
     container.style.display = 'block';
     requestAnimationFrame(this.rotateCircles);
-  };
+  }; //4th stop animation
+
 
   this.clearRotation = function () {
     container.style.display = 'none';
@@ -62,7 +63,7 @@ function Loading(data) {
 
   this.rotateCircles = function (timestamp) {
     var index = circles.length;
-    progress += .007;
+    progress += .008;
 
     while (index--) {
       var _circles$index = circles[index],
@@ -84,19 +85,19 @@ function Loading(data) {
 
   var createFragment = function createFragment() {
     var style = window.getComputedStyle(targetEl);
-    var extraPadding = ['padding-left', 'padding-right'].map(function (key) {
-      return parseInt(style.getPropertyValue(key), 10);
+    var extraSizing = ['padding-left', 'padding-right', 'border-left', 'border-right'].map(function (key) {
+      return parseInt(style.getPropertyValue(key), 10) || 0;
     }).reduce(function (prev, cur) {
       return prev + cur;
     });
-    var containerWidth = targetEl.getBoundingClientRect().width - extraPadding;
+    var containerWidth = targetEl.getBoundingClientRect().width - extraSizing;
     var containerHeight = targetEl.getBoundingClientRect().height;
-    var circleWidth = containerWidth / 8;
-    var center = containerWidth - circleWidth * count;
+    var circleWidth = containerWidth / (count + 2);
+    var xSpacing = containerWidth / 2 - circleWidth / 2;
     container = document.createElement('div');
     container.className = 'c-rotate';
 
-    for (var i = 1; i <= count; i++) {
+    for (var i = 0; i <= count; i++) {
       var circle = container.appendChild(document.createElement('div'));
       circle.style.width = circleWidth + 'px';
       circle.style.height = circleWidth + 'px';
@@ -105,8 +106,8 @@ function Loading(data) {
         el: circle,
         x_offset: x_offset,
         y_offset: 0,
-        x_start: center + circleWidth / 2,
-        x_dist: center
+        x_start: xSpacing,
+        x_dist: xSpacing
       });
     }
 

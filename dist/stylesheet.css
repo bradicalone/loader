@@ -9,8 +9,18 @@ body {
   box-sizing: border-box;
 }
 
+.c-rotate {
+  position: relative;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
+}
+
 .c-rotate div {
   border-radius: 50%;
   background: black;
+  position: absolute;
+  left: 0;
   will-change: transform;
 }
