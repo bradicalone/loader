@@ -41,7 +41,7 @@ function Loading(data) {
         container.style.display = 'block'
         requestAnimationFrame(this.rotateCircles)
 
-    }
+    } 
     this.clearRotation = function () {
         container.style.display = 'none'
         if(text) {
