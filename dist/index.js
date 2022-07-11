@@ -32,8 +32,6 @@ function Loading(data) {
 
 
   this.initRotate = function () {
-    console.log(this);
-
     if (text) {
       if (text.nodeType == 1) {
         text.style.display = 'none';
