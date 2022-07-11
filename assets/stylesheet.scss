@@ -1,0 +1,26 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
+.c-rotate {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+
+    div {
+        border-radius: 50%;
+        background: black;
+        position: absolute;
+        left: 0;
+        will-change: transform;
+    }
+}
