@@ -13,17 +13,21 @@ This exposes `Loading` by default. To make it ready for use, you need to initial
 
 ```javascript
 /**
-* @param {Object} data Object of key value pairs about how you want to use the loader.
-* @param {String} data.containerId The element id of the loader cirlces is going to be in
+* @param {Object} data Information about the loader.
+* @param {HTMLElement} data.containerElement The element id of the loader cirlces is going to be in
 * @param {number} data.count how many rotated circles.
-* @param {String} data.hasElText class name if there is a element with text
-* @param {String} data.textElId class name of element if <hasElText> is true
+* @param {Boolean} data.hasElText If there is a child element in the containerElement with text
+* @param {HTMLElement} data.textElement class name of element if <hasElText> is true
+* @param {Number|String} data.circleSize size of circle in pixels
+* @param {String} data.color color of circles
 */
 const loader = new Loading({
-    containerId: 'btn-loader',
+    containerElement: document.getElementById('btn-loader'),
     count: 5,
     hasElText: false,
-    textElId: 'loading-element'
+    textElement: document.getElementById('loading-element'),
+    circleSize: '25',
+    color: '#9e1031'
 })
 
 document.getElementById('btn-loader').onclick = function () {
@@ -36,17 +40,20 @@ document.getElementById('btn-loader-stop').onclick = function () {
 }
 
 /**
-* @param {Object} data Object of key value pairs about how you want to use the loader.
-* @param {String} data.containerId The element id of the loader cirlces is going to be in
+* @param {Object} data Information about the loader.
+* @param {HTMLElement} data.containerElement The element id of the loader cirlces is going to be in
 * @param {number} data.count how many rotated circles.
-* @param {String} data.hasElText class name if there is a element with text
-* @param {String} data.textElId class name of element if <hasElText> is true
+* @param {Boolean} data.hasElText If there is a child element in the containerElement with text
+* @param {HTMLElement} data.textElement class name of element if <hasElText> is true
+* @param {Number|String} data.circleSize size of circle in pixels
+* @param {String} data.color color of circles
 */
 const loaderTwo = new Loading({
-    containerId: 'btn-loader-two',
-    count: 5,
+    containerElement: document.getElementById('btn-loader-two'),
+    count: 6,
     hasElText: true,
-    textElId: 'loading-element-two'
+    textElement: document.getElementById('loading-element-two'),
+    circleSize: '2px'
 })
 
 document.getElementById('btn-loader-two').onclick = function () {

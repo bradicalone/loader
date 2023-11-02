@@ -2,21 +2,29 @@
 
 /**
 * @param {Object} data Information about the loader.
-* @param {String} data.containerId The element id of the loader cirlces is going to be in
+* @param {HTMLElement} data.containerElement The element id of the loader cirlces is going to be in
 * @param {number} data.count how many rotated circles.
-* @param {String} data.hasElText class name if there is a element with text
-* @param {String} data.textElId class name of element if <hasElText> is true
+* @param {Boolean} data.hasElText If there is a child element in the containerElement with text
+* @param {HTMLElement} data.textElement class name of element if <hasElText> is true
+* @param {Number|String} data.circleSize size of circle in pixels
+* @param {String} data.color color of circles
 */
 function Loading(data) {
-  var containerId = data.containerId,
+  var _this = this;
+
+  var containerElement = data.containerElement,
       count = data.count,
       hasElText = data.hasElText,
-      textElId = data.textElId;
-  var targetEl = document.getElementById(containerId);
-  var text = hasElText && document.getElementById(textElId) || targetEl.childNodes[0]; // If target element has text instead of element 
+      textElement = data.textElement,
+      circleSize = data.circleSize,
+      color = data.color;
+  this.size = Number(circleSize) || Number(circleSize.replace(/[^0-9]/g, ''));
+  var targetEl = containerElement;
+  var text = hasElText && textElement || targetEl.childNodes[0]; // If target element has text instead of element 
 
   var previousText = '';
   var fragment = document.createDocumentFragment();
+  var scaleDifference = .4;
   var circles = [],
       container;
   var progress = 0;
@@ -63,17 +71,19 @@ function Loading(data) {
 
   this.rotateCircles = function (timestamp) {
     var index = circles.length;
-    progress += .008;
+    progress += .009;
 
     while (index--) {
       var _circles$index = circles[index],
           el = _circles$index.el,
           x_start = _circles$index.x_start,
+          y_start = _circles$index.y_start,
+          y_dist = _circles$index.y_dist,
           x_offset = _circles$index.x_offset,
           x_dist = _circles$index.x_dist;
       var x = rubberBand(x_start, x_dist, progress + x_offset);
-      var y = scaleEase(-3, 6, progress + x_offset);
-      var scale = scaleEase(1, .3, progress + x_offset);
+      var y = scaleEase(y_start, y_dist, progress + x_offset);
+      var scale = scaleEase(1, scaleDifference, progress + x_offset);
       var opacity = scaleEase(.8, .3, progress + x_offset);
       el.style.opacity = opacity;
       el.style.transform = "translate3d(".concat(x, "px, ").concat(y, "px, 0) scale(").concat(-scale, ")");
@@ -85,15 +95,22 @@ function Loading(data) {
 
   var createFragment = function createFragment() {
     var style = window.getComputedStyle(targetEl);
-    var extraSizing = ['padding-left', 'padding-right', 'border-left', 'border-right'].map(function (key) {
+    var extraSizingWidth = ['padding-left', 'padding-right', 'border-left', 'border-right'].map(function (key) {
       return parseInt(style.getPropertyValue(key), 10) || 0;
     }).reduce(function (prev, cur) {
       return prev + cur;
     });
-    var containerWidth = targetEl.getBoundingClientRect().width - extraSizing;
+    var extraSizingHeight = ['border-top', 'border-bottom'].map(function (key) {
+      return parseInt(style.getPropertyValue(key), 10) || 0;
+    }).reduce(function (prev, cur) {
+      return prev + cur;
+    });
+    var containerWidth = targetEl.getBoundingClientRect().width - extraSizingWidth;
     var containerHeight = targetEl.getBoundingClientRect().height;
-    var circleWidth = containerWidth / (count + 2);
+    var circleWidth = _this.size || containerWidth / (count + 2);
     var xSpacing = containerWidth / 2 - circleWidth / 2;
+    var y_offset = (containerHeight - extraSizingHeight) / 2;
+    var y_start = (y_offset - circleWidth) / 2 - circleWidth * scaleDifference / 2;
     container = document.createElement('div');
     container.className = 'c-rotate';
 
@@ -101,18 +118,20 @@ function Loading(data) {
       var circle = container.appendChild(document.createElement('div'));
       circle.style.width = circleWidth + 'px';
       circle.style.height = circleWidth + 'px';
+      circle.style.background = color;
       var x_offset = i / count;
       circles.push({
         el: circle,
         x_offset: x_offset,
-        y_offset: 0,
+        y_start: y_start,
+        y_dist: circleWidth / 2,
         x_start: xSpacing,
         x_dist: xSpacing
       });
     }
 
     fragment.appendChild(container);
-    container.style.top = 'calc(50% ' + '- ' + circleWidth + 'px)';
+    container.style.top = 'calc(50% ' + '- ' + y_offset + 'px)';
     targetEl.style.height = containerHeight + 'px';
     container.style.display = 'none';
     targetEl.appendChild(fragment);
