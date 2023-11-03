@@ -4,14 +4,13 @@
 * @param {HTMLElement} data.containerElement The element id of the loader cirlces is going to be in
 * @param {number} data.count how many rotated circles.
 * @param {Boolean} data.hasElText If there is a child element in the containerElement with text
-* @param {HTMLElement} data.textElement class name of element if <hasElText> is true
+* @param {HTMLElement} data.textElement child text element or any text element if it exists
 * @param {Number|String} data.circleSize size of circle in pixels
 * @param {String} data.color color of circles
 */
 function Loading(data) {
     const { containerElement, count, hasElText, textElement, circleSize, color } = data
     this.size = Number(circleSize) || Number(circleSize.replace(/[^0-9]/g, ''))
-
     const targetEl = containerElement
     const text = hasElText && textElement  || targetEl.childNodes[0]
     // If target element has text instead of element 
@@ -35,7 +34,6 @@ function Loading(data) {
                 targetEl.firstChild.textContent = ''
             }
         }
-        
         container.style.display = 'block'
         requestAnimationFrame(this.rotateCircles)
     } 
@@ -60,7 +58,8 @@ function Loading(data) {
         while (index--) {
             const { el, x_start, y_start, y_dist, x_offset, x_dist} = circles[index]
             const x = rubberBand(x_start, x_dist, progress + x_offset);
-            const y = scaleEase(y_start, y_dist, progress + x_offset);
+            const y = scaleEase(y_start, scaleEase(0, y_dist, progress + x_offset), progress + x_offset); // Messing around
+            // const y = scaleEase(y_start, y_dist, progress + x_offset); // 👈  Current
             const scale = scaleEase(1, scaleDifference, progress + x_offset);
             const opacity = scaleEase(.8, .3, progress + x_offset)
             el.style.opacity = opacity
