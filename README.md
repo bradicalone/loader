@@ -4,7 +4,7 @@
 * bring in the stylesheet.css
 * Or use both from cdn link:
 ```
-    <script src="https://cdn.jsdelivr.net/gh/bradicalone/loader@0.1.5/dist/index.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/gh/bradicalone/loader@0.1.6/dist/index.js"></script> 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bradicalone/loader@0.1.5/dist/stylesheet.css">
 ```
 ## Usage
@@ -17,7 +17,7 @@ This exposes `Loading` by default. To make it ready for use, you need to initial
 * @param {HTMLElement} data.containerElement The element id of the loader cirlces is going to be in
 * @param {number} data.count how many rotated circles.
 * @param {Boolean} data.hasElText If there is a child element in the containerElement with text
-* @param {HTMLElement} data.textElement class name of element if <hasElText> is true
+* @param {HTMLElement} data.textElement child text element or any text element if it exists <hasElText> is true
 * @param {Number|String} data.circleSize size of circle in pixels
 * @param {String} data.color color of circles
 */
@@ -44,7 +44,7 @@ document.getElementById('btn-loader-stop').onclick = function () {
 * @param {HTMLElement} data.containerElement The element id of the loader cirlces is going to be in
 * @param {number} data.count how many rotated circles.
 * @param {Boolean} data.hasElText If there is a child element in the containerElement with text
-* @param {HTMLElement} data.textElement class name of element if <hasElText> is true
+* @param {HTMLElement} data.textElement child text element or any text element if it exists <hasElText> is true
 * @param {Number|String} data.circleSize size of circle in pixels
 * @param {String} data.color color of circles
 */
