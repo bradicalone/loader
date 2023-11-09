@@ -7,16 +7,18 @@
 * @param {HTMLElement} data.textElement child text element or any text element if it exists
 * @param {Number|String} data.circleSize size of circle in pixels
 * @param {String} data.color color of circles
+* @param {Number|String} data.width how much width of the whole rotation in pixels
 */
 function Loading(data) {
-    const { containerElement, count, hasElText, textElement, circleSize, color } = data
-    this.size = Number(circleSize) || Number(circleSize.replace(/[^0-9]/g, ''))
+    const { containerElement, count, hasElText, textElement, circleSize, color, width } = data
+    this.size = (Number(circleSize) || Number(circleSize?.replace(/[^0-9]/g, ''))) || containerElement.offsetWidth / 2 / count
+    this.width = (Number(width) || Number(width?.replace(/[^0-9]/g, ''))) || containerElement.offsetWidth / 2
     const targetEl = containerElement
     const text = hasElText && textElement  || targetEl.childNodes[0]
     // If target element has text instead of element 
     let previousText = ''
     const fragment = document.createDocumentFragment();
-    const scaleDifference = .4
+    const scaleDifference = .6 // Size of the circle scaling down to
     let circles = [], container;
     let progress = 0
     let animateId;
@@ -58,10 +60,9 @@ function Loading(data) {
         while (index--) {
             const { el, x_start, y_start, y_dist, x_offset, x_dist} = circles[index]
             const x = rubberBand(x_start, x_dist, progress + x_offset);
-            const y = scaleEase(y_start, scaleEase(0, y_dist, progress + x_offset), progress + x_offset); // Messing around
-            // const y = scaleEase(y_start, y_dist, progress + x_offset); // 👈  Current
+            const y = scaleEase(y_start, y_dist, progress + x_offset); // 👈  Current
             const scale = scaleEase(1, scaleDifference, progress + x_offset);
-            const opacity = scaleEase(.8, .3, progress + x_offset)
+            const opacity = scaleEase(1, .8, progress + x_offset)
             el.style.opacity = opacity
             el.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${-scale})`
         }
@@ -71,6 +72,7 @@ function Loading(data) {
     // 1st Creates the elements and adds necessary styles on page load (Helps with animation rendering)
     const createFragment = () => {
         const style = window.getComputedStyle(targetEl);
+
         const extraSizingWidth = ['padding-left', 'padding-right', 'border-left', 'border-right']
         .map((key) => parseInt(style.getPropertyValue(key), 10) || 0)
         .reduce((prev, cur) => prev + cur);
@@ -83,7 +85,8 @@ function Loading(data) {
         const containerHeight = targetEl.getBoundingClientRect().height 
         const circleWidth =  this.size || containerWidth / (count + 2)
 
-        const xSpacing = (containerWidth / 2) - circleWidth / 2
+        const xSpacing = (this.width / 2) - circleWidth / 2 
+        const xStart = xSpacing + (containerWidth - this.width) / 2
         const y_offset = ((containerHeight - extraSizingHeight) /2)
         const y_start = ((y_offset - circleWidth) / 2) - (circleWidth * scaleDifference/2)
       
@@ -102,11 +105,10 @@ function Loading(data) {
                 x_offset,
                 y_start,
                 y_dist: circleWidth/2,
-                x_start: xSpacing,
+                x_start: xStart,
                 x_dist: xSpacing
             })
         }
-
         fragment.appendChild(container)
         container.style.top = 'calc(50% ' + '- ' + y_offset +'px)'
         targetEl.style.height = containerHeight +'px'
