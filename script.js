@@ -60,6 +60,7 @@ function Loading(data) {
         while (index--) {
             const { el, x_start, y_start, y_dist, x_offset, x_dist} = circles[index]
             const x = rubberBand(x_start, x_dist, progress + x_offset);
+            // const y = scaleEase(y_start, scaleEase(0, y_dist, progress + x_offset), progress + x_offset); // Messing around
             const y = scaleEase(y_start, y_dist, progress + x_offset); // 👈  Current
             const scale = scaleEase(1, scaleDifference, progress + x_offset);
             const opacity = scaleEase(1, .8, progress + x_offset)
