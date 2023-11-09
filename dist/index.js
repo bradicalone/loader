@@ -5,9 +5,10 @@
 * @param {HTMLElement} data.containerElement The element id of the loader cirlces is going to be in
 * @param {number} data.count how many rotated circles.
 * @param {Boolean} data.hasElText If there is a child element in the containerElement with text
-* @param {HTMLElement} data.textElement class name of element if <hasElText> is true
+* @param {HTMLElement} data.textElement child text element or any text element if it exists
 * @param {Number|String} data.circleSize size of circle in pixels
 * @param {String} data.color color of circles
+* @param {Number|String} data.width how much width of the whole rotation in pixels
 */
 function Loading(data) {
   var _this = this;
@@ -17,14 +18,17 @@ function Loading(data) {
       hasElText = data.hasElText,
       textElement = data.textElement,
       circleSize = data.circleSize,
-      color = data.color;
-  this.size = Number(circleSize) || Number(circleSize.replace(/[^0-9]/g, ''));
+      color = data.color,
+      width = data.width;
+  this.size = Number(circleSize) || Number(circleSize === null || circleSize === void 0 ? void 0 : circleSize.replace(/[^0-9]/g, '')) || containerElement.offsetWidth / 2 / count;
+  this.width = Number(width) || Number(width === null || width === void 0 ? void 0 : width.replace(/[^0-9]/g, '')) || containerElement.offsetWidth / 2;
   var targetEl = containerElement;
   var text = hasElText && textElement || targetEl.childNodes[0]; // If target element has text instead of element 
 
   var previousText = '';
   var fragment = document.createDocumentFragment();
-  var scaleDifference = .4;
+  var scaleDifference = .6; // Size of the circle scaling down to
+
   var circles = [],
       container;
   var progress = 0;
@@ -81,10 +85,12 @@ function Loading(data) {
           y_dist = _circles$index.y_dist,
           x_offset = _circles$index.x_offset,
           x_dist = _circles$index.x_dist;
-      var x = rubberBand(x_start, x_dist, progress + x_offset);
-      var y = scaleEase(y_start, y_dist, progress + x_offset);
+      var x = rubberBand(x_start, x_dist, progress + x_offset); // const y = scaleEase(y_start, scaleEase(0, y_dist, progress + x_offset), progress + x_offset); // Messing around
+
+      var y = scaleEase(y_start, y_dist, progress + x_offset); // 👈  Current
+
       var scale = scaleEase(1, scaleDifference, progress + x_offset);
-      var opacity = scaleEase(.8, .3, progress + x_offset);
+      var opacity = scaleEase(1, .8, progress + x_offset);
       el.style.opacity = opacity;
       el.style.transform = "translate3d(".concat(x, "px, ").concat(y, "px, 0) scale(").concat(-scale, ")");
     }
@@ -108,7 +114,8 @@ function Loading(data) {
     var containerWidth = targetEl.getBoundingClientRect().width - extraSizingWidth;
     var containerHeight = targetEl.getBoundingClientRect().height;
     var circleWidth = _this.size || containerWidth / (count + 2);
-    var xSpacing = containerWidth / 2 - circleWidth / 2;
+    var xSpacing = _this.width / 2 - circleWidth / 2;
+    var xStart = xSpacing + (containerWidth - _this.width) / 2;
     var y_offset = (containerHeight - extraSizingHeight) / 2;
     var y_start = (y_offset - circleWidth) / 2 - circleWidth * scaleDifference / 2;
     container = document.createElement('div');
@@ -125,7 +132,7 @@ function Loading(data) {
         x_offset: x_offset,
         y_start: y_start,
         y_dist: circleWidth / 2,
-        x_start: xSpacing,
+        x_start: xStart,
         x_dist: xSpacing
       });
     }
