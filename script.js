@@ -3,18 +3,16 @@
 * @param {Object} data Information about the loader.
 * @param {HTMLElement} data.containerElement The element id of the loader cirlces is going to be in
 * @param {number} data.count how many rotated circles.
-* @param {Boolean} data.hasElText If there is a child element in the containerElement with text
-* @param {HTMLElement} data.textElement child text element or any text element if it exists
 * @param {Number|String} data.circleSize size of circle in pixels
 * @param {String} data.color color of circles
 * @param {Number|String} data.width how much width of the whole rotation in pixels
 */
 function Loading(data) {
-    const { containerElement, count, hasElText, textElement, circleSize, color, width } = data
+    const { containerElement, count, circleSize, color, width } = data
     this.size = (Number(circleSize) || Number(circleSize?.replace(/[^0-9]/g, ''))) || containerElement.offsetWidth / 2 / count
     this.width = (Number(width) || Number(width?.replace(/[^0-9]/g, ''))) || containerElement.offsetWidth / 2
     const targetEl = containerElement
-    const text = hasElText && textElement  || targetEl?.childNodes[0]
+    const targetChildren = Array.from(targetEl?.childNodes)
     const fragment = document.createDocumentFragment();
     const scaleDifference = .5 // Size of the circle scaling down to
     // If target element has text instead of element 
@@ -25,16 +23,18 @@ function Loading(data) {
     
     const scaleEase = (startX, distance, progress) => (startX + (distance * Math.cos(progress * (Math.PI * 2)))).toFixed(3)
     const rubberBand = (startX, distance, progress) => (startX + (distance * Math.sin(progress * (Math.PI * 2))))
-
+    
     // 2nd Gets Elements inplace and ready (Also helps for animaton rendering)
     this.initRotate = function () {
-        if(text) {
-            if(text.nodeType == 1) {
-                text.style.display = 'none'
-            } else {
-                previousText = targetEl.firstChild.textContent
-                targetEl.firstChild.textContent = ''
-            }
+        if(targetChildren) {
+            targetChildren.forEach(el => {
+                if(el.nodeType == 1) {
+                    el.style.display = 'none'
+                } else {
+                    previousText = el.textContent
+                    el.textContent = ''
+                }
+            })
         }
         container.style.display = 'block'
         requestAnimationFrame(this.rotateCircles)
@@ -43,12 +43,14 @@ function Loading(data) {
     //4th stop animation
     this.clearRotation = function () {
         container.style.display = 'none'
-        if(text) {
-            if(text.nodeType == 1) {
-                text.style.display = 'block'
-            } else {
-                targetEl.firstChild.textContent = previousText
-            }
+        if(targetChildren) {
+            targetChildren.forEach(el => {
+                if(el.nodeType == 1) {
+                    el.style.display = null
+                } else {
+                    el.textContent = previousText
+                }
+            })
         }
         cancelAnimationFrame(animateId)  // 👈  timeout to stop animation and remove if needed
     }
@@ -72,7 +74,6 @@ function Loading(data) {
     // 1st Creates the elements and adds necessary styles on page load (Helps with animation rendering)
     const createFragment = () => {
         const style = window.getComputedStyle(targetEl);
-
         const extraSizingWidth = ['padding-left', 'padding-right', 'border-left', 'border-right']
         .map((key) => parseInt(style.getPropertyValue(key), 10) || 0)
         .reduce((prev, cur) => prev + cur);

@@ -16,16 +16,12 @@ This exposes `Loading` by default. To make it ready for use, you need to initial
 * @param {Object} data Information about the loader.
 * @param {HTMLElement} data.containerElement The element id of the loader cirlces is going to be in
 * @param {number} data.count how many rotated circles.
-* @param {Boolean} data.hasElText If there is a child element in the containerElement with text
-* @param {HTMLElement} data.textElement child text element or any text element if it exists <hasElText> is true
 * @param {Number|String} data.circleSize size of circle in pixels
 * @param {Number|String} data.width how much width of the whole rotation in pixels
 */
 const loader = new Loading({
     containerElement: document.getElementById('btn-loader'),
     count: 8,
-    hasElText: false,
-    textElement: document.getElementById('loading-element'),
     circleSize: 18,
     color: '#969696',
     width: '125px'
@@ -44,8 +40,6 @@ document.getElementById('btn-loader-stop').onclick = function () {
 * @param {Object} data Information about the loader.
 * @param {HTMLElement} data.containerElement The element id of the loader cirlces is going to be in
 * @param {number} data.count how many rotated circles.
-* @param {Boolean} data.hasElText If there is a child element in the containerElement with text
-* @param {HTMLElement} data.textElement child text element or any text element if it exists <hasElText> is true
 * @param {Number|String} data.circleSize size of circle in pixels
 * @param {String} data.color color of circles
 * @param {Number|String} data.width how much width of the whole rotation in pixels
@@ -53,8 +47,6 @@ document.getElementById('btn-loader-stop').onclick = function () {
 const loaderTwo = new Loading({
     containerElement: document.getElementById('btn-loader-two'),
     count: 6,
-    hasElText: true,
-    textElement: document.getElementById('loading-element-two'),
     circleSize: '2px'
 })
 
