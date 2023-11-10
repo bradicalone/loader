@@ -2,13 +2,13 @@
 /**
 * @param {Object} data Information about the loader.
 * @param {HTMLElement} data.containerElement The element id of the loader cirlces is going to be in
-* @param {number} data.count how many rotated circles.
-* @param {Number|String} data.circleSize size of circle in pixels
-* @param {String} data.color color of circles
-* @param {Number|String} data.width how much width of the whole rotation in pixels
+* @param {number} data.count how many rotated circles. | defualt: 5
+* @param {Number|String} data.circleSize size of circle in pixels | default: half target container devided by count
+* @param {String} data.color color of circles | default: black
+* @param {Number|String} data.width how much width of the whole rotation in pixels | default: half width of target container
 */
 function Loading(data) {
-    const { containerElement, count, circleSize, color, width } = data
+    const { containerElement, count=5, circleSize, color, width } = data
     this.size = (Number(circleSize) || Number(circleSize?.replace(/[^0-9]/g, ''))) || containerElement.offsetWidth / 2 / count
     this.width = (Number(width) || Number(width?.replace(/[^0-9]/g, ''))) || containerElement.offsetWidth / 2
     const targetEl = containerElement
@@ -17,9 +17,8 @@ function Loading(data) {
     const scaleDifference = .5 // Size of the circle scaling down to
     // If target element has text instead of element 
     let previousText = ''
-    let circles = [], container;
     let progress = 0
-    let animateId;
+    let circles = [], container, animateId;
     
     const scaleEase = (startX, distance, progress) => (startX + (distance * Math.cos(progress * (Math.PI * 2)))).toFixed(3)
     const rubberBand = (startX, distance, progress) => (startX + (distance * Math.sin(progress * (Math.PI * 2))))

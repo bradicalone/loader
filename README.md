@@ -4,20 +4,21 @@
 * bring in the stylesheet.css
 * Or use both from cdn link:
 ```
-    <script src="https://cdn.jsdelivr.net/gh/bradicalone/loader@1.1.0/dist/index.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/gh/bradicalone/loader@1.2.0/dist/index.min.js"></script> 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bradicalone/loader@0.1.5/dist/stylesheet.css">
 ```
 ## Usage
 
-This exposes `Loading` by default. To make it ready for use, you need to initialize the class to use it's methods:
+This exposes `Loading` by default. To make it ready for use, you need to initialize the Constructor to use it's methods:
 
 ```javascript
 /**
 * @param {Object} data Information about the loader.
 * @param {HTMLElement} data.containerElement The element id of the loader cirlces is going to be in
-* @param {number} data.count how many rotated circles.
-* @param {Number|String} data.circleSize size of circle in pixels
-* @param {Number|String} data.width how much width of the whole rotation in pixels
+* @param {number} data.count how many rotated circles. | defualt: 5
+* @param {Number|String} data.circleSize size of circle in pixels | default: half target container devided by count
+* @param {String} data.color color of circles | default: black
+* @param {Number|String} data.width how much width of the whole rotation in pixels | default: half width of target container
 */
 const loader = new Loading({
     containerElement: document.getElementById('btn-loader'),
@@ -39,10 +40,10 @@ document.getElementById('btn-loader-stop').onclick = function () {
 /**
 * @param {Object} data Information about the loader.
 * @param {HTMLElement} data.containerElement The element id of the loader cirlces is going to be in
-* @param {number} data.count how many rotated circles.
-* @param {Number|String} data.circleSize size of circle in pixels
-* @param {String} data.color color of circles
-* @param {Number|String} data.width how much width of the whole rotation in pixels
+* @param {number} data.count how many rotated circles. | defualt: 5
+* @param {Number|String} data.circleSize size of circle in pixels | default: half target container devided by count
+* @param {String} data.color color of circles | default: black
+* @param {Number|String} data.width how much width of the whole rotation in pixels | default: half width of target container
 */
 const loaderTwo = new Loading({
     containerElement: document.getElementById('btn-loader-two'),

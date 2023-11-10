@@ -3,36 +3,33 @@
 /**
 * @param {Object} data Information about the loader.
 * @param {HTMLElement} data.containerElement The element id of the loader cirlces is going to be in
-* @param {number} data.count how many rotated circles.
-* @param {Boolean} data.hasElText If there is a child element in the containerElement with text
-* @param {HTMLElement} data.textElement child text element or any text element if it exists
-* @param {Number|String} data.circleSize size of circle in pixels
-* @param {String} data.color color of circles
-* @param {Number|String} data.width how much width of the whole rotation in pixels
+* @param {number} data.count how many rotated circles. | defualt: 5
+* @param {Number|String} data.circleSize size of circle in pixels | default: half target container devided by count
+* @param {String} data.color color of circles | default: black
+* @param {Number|String} data.width how much width of the whole rotation in pixels | default: half width of target container
 */
 function Loading(data) {
   var _this = this;
 
   var containerElement = data.containerElement,
-      count = data.count,
-      hasElText = data.hasElText,
-      textElement = data.textElement,
+      _data$count = data.count,
+      count = _data$count === void 0 ? 5 : _data$count,
       circleSize = data.circleSize,
       color = data.color,
       width = data.width;
   this.size = Number(circleSize) || Number(circleSize === null || circleSize === void 0 ? void 0 : circleSize.replace(/[^0-9]/g, '')) || containerElement.offsetWidth / 2 / count;
   this.width = Number(width) || Number(width === null || width === void 0 ? void 0 : width.replace(/[^0-9]/g, '')) || containerElement.offsetWidth / 2;
   var targetEl = containerElement;
-  var text = hasElText && textElement || (targetEl === null || targetEl === void 0 ? void 0 : targetEl.childNodes[0]);
+  var targetChildren = Array.from(targetEl === null || targetEl === void 0 ? void 0 : targetEl.childNodes);
   var fragment = document.createDocumentFragment();
   var scaleDifference = .5; // Size of the circle scaling down to
   // If target element has text instead of element 
 
   var previousText = '';
-  var circles = [],
-      container;
   var progress = 0;
-  var animateId;
+  var circles = [],
+      container,
+      animateId;
 
   var scaleEase = function scaleEase(startX, distance, progress) {
     return (startX + distance * Math.cos(progress * (Math.PI * 2))).toFixed(3);
@@ -44,13 +41,15 @@ function Loading(data) {
 
 
   this.initRotate = function () {
-    if (text) {
-      if (text.nodeType == 1) {
-        text.style.display = 'none';
-      } else {
-        previousText = targetEl.firstChild.textContent;
-        targetEl.firstChild.textContent = '';
-      }
+    if (targetChildren) {
+      targetChildren.forEach(function (el) {
+        if (el.nodeType == 1) {
+          el.style.display = 'none';
+        } else {
+          previousText = el.textContent;
+          el.textContent = '';
+        }
+      });
     }
 
     container.style.display = 'block';
@@ -61,12 +60,14 @@ function Loading(data) {
   this.clearRotation = function () {
     container.style.display = 'none';
 
-    if (text) {
-      if (text.nodeType == 1) {
-        text.style.display = 'block';
-      } else {
-        targetEl.firstChild.textContent = previousText;
-      }
+    if (targetChildren) {
+      targetChildren.forEach(function (el) {
+        if (el.nodeType == 1) {
+          el.style.display = null;
+        } else {
+          el.textContent = previousText;
+        }
+      });
     }
 
     cancelAnimationFrame(animateId); // 👈  timeout to stop animation and remove if needed
