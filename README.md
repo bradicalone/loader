@@ -4,7 +4,7 @@
 * bring in the stylesheet.css
 * Or use both from cdn link:
 ```
-    <script src="https://cdn.jsdelivr.net/gh/bradicalone/loader@0.1.7/dist/index.js"></script> 
+    <script src="https://cdn.jsdelivr.net/gh/bradicalone/loader@1.1.0/dist/index.min.js"></script> 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bradicalone/loader@0.1.5/dist/stylesheet.css">
 ```
 ## Usage
@@ -65,3 +65,9 @@ document.getElementById('btn-loader-stop-two').onclick = function () {
     loaderTwo.clearRotation()
 }
 ```
+
+## Playground
+* Open HTML file in the browser
+* Play with the constructor params `test-script.js` for each button
+
+![Alt text](./loader-screenshot.png)

@@ -14,11 +14,11 @@ function Loading(data) {
     this.size = (Number(circleSize) || Number(circleSize?.replace(/[^0-9]/g, ''))) || containerElement.offsetWidth / 2 / count
     this.width = (Number(width) || Number(width?.replace(/[^0-9]/g, ''))) || containerElement.offsetWidth / 2
     const targetEl = containerElement
-    const text = hasElText && textElement  || targetEl.childNodes[0]
+    const text = hasElText && textElement  || targetEl?.childNodes[0]
+    const fragment = document.createDocumentFragment();
+    const scaleDifference = .5 // Size of the circle scaling down to
     // If target element has text instead of element 
     let previousText = ''
-    const fragment = document.createDocumentFragment();
-    const scaleDifference = .6 // Size of the circle scaling down to
     let circles = [], container;
     let progress = 0
     let animateId;
@@ -60,7 +60,6 @@ function Loading(data) {
         while (index--) {
             const { el, x_start, y_start, y_dist, x_offset, x_dist} = circles[index]
             const x = rubberBand(x_start, x_dist, progress + x_offset);
-            // const y = scaleEase(y_start, scaleEase(0, y_dist, progress + x_offset), progress + x_offset); // Messing around
             const y = scaleEase(y_start, y_dist, progress + x_offset); // 👈  Current
             const scale = scaleEase(1, scaleDifference, progress + x_offset);
             const opacity = scaleEase(1, .8, progress + x_offset)
@@ -83,14 +82,14 @@ function Loading(data) {
         .reduce((prev, cur) => prev + cur);
 
         const containerWidth = targetEl.getBoundingClientRect().width - extraSizingWidth
-        const containerHeight = targetEl.getBoundingClientRect().height 
+        const targetContainerHeight = targetEl.getBoundingClientRect().height 
         const circleWidth =  this.size || containerWidth / (count + 2)
 
+        const halfHeight = targetContainerHeight/2 
         const xSpacing = (this.width / 2) - circleWidth / 2 
         const xStart = xSpacing + (containerWidth - this.width) / 2
-        const y_offset = ((containerHeight - extraSizingHeight) /2)
-        const y_start = ((y_offset - circleWidth) / 2) - (circleWidth * scaleDifference/2)
-      
+        const y_offset = (targetContainerHeight - circleWidth * 2) / 2
+        const y_start = circleWidth * scaleDifference/2
         container = document.createElement('div')
         container.className = 'c-rotate'
 
@@ -111,8 +110,9 @@ function Loading(data) {
             })
         }
         fragment.appendChild(container)
-        container.style.top = 'calc(50% ' + '- ' + y_offset +'px)'
-        targetEl.style.height = containerHeight +'px'
+        container.style.top = 'calc(50% ' + '+ ' + y_offset +'px)'
+        container.style.height = targetContainerHeight +'px'
+        targetEl.style.height = targetContainerHeight +'px'
         container.style.display = 'none'
         targetEl.appendChild(fragment)
     }

@@ -23,12 +23,12 @@ function Loading(data) {
   this.size = Number(circleSize) || Number(circleSize === null || circleSize === void 0 ? void 0 : circleSize.replace(/[^0-9]/g, '')) || containerElement.offsetWidth / 2 / count;
   this.width = Number(width) || Number(width === null || width === void 0 ? void 0 : width.replace(/[^0-9]/g, '')) || containerElement.offsetWidth / 2;
   var targetEl = containerElement;
-  var text = hasElText && textElement || targetEl.childNodes[0]; // If target element has text instead of element 
+  var text = hasElText && textElement || (targetEl === null || targetEl === void 0 ? void 0 : targetEl.childNodes[0]);
+  var fragment = document.createDocumentFragment();
+  var scaleDifference = .5; // Size of the circle scaling down to
+  // If target element has text instead of element 
 
   var previousText = '';
-  var fragment = document.createDocumentFragment();
-  var scaleDifference = .6; // Size of the circle scaling down to
-
   var circles = [],
       container;
   var progress = 0;
@@ -85,8 +85,7 @@ function Loading(data) {
           y_dist = _circles$index.y_dist,
           x_offset = _circles$index.x_offset,
           x_dist = _circles$index.x_dist;
-      var x = rubberBand(x_start, x_dist, progress + x_offset); // const y = scaleEase(y_start, scaleEase(0, y_dist, progress + x_offset), progress + x_offset); // Messing around
-
+      var x = rubberBand(x_start, x_dist, progress + x_offset);
       var y = scaleEase(y_start, y_dist, progress + x_offset); // 👈  Current
 
       var scale = scaleEase(1, scaleDifference, progress + x_offset);
@@ -112,12 +111,13 @@ function Loading(data) {
       return prev + cur;
     });
     var containerWidth = targetEl.getBoundingClientRect().width - extraSizingWidth;
-    var containerHeight = targetEl.getBoundingClientRect().height;
+    var targetContainerHeight = targetEl.getBoundingClientRect().height;
     var circleWidth = _this.size || containerWidth / (count + 2);
+    var halfHeight = targetContainerHeight / 2;
     var xSpacing = _this.width / 2 - circleWidth / 2;
     var xStart = xSpacing + (containerWidth - _this.width) / 2;
-    var y_offset = (containerHeight - extraSizingHeight) / 2;
-    var y_start = (y_offset - circleWidth) / 2 - circleWidth * scaleDifference / 2;
+    var y_offset = (targetContainerHeight - circleWidth * 2) / 2;
+    var y_start = circleWidth * scaleDifference / 2;
     container = document.createElement('div');
     container.className = 'c-rotate';
 
@@ -138,8 +138,9 @@ function Loading(data) {
     }
 
     fragment.appendChild(container);
-    container.style.top = 'calc(50% ' + '- ' + y_offset + 'px)';
-    targetEl.style.height = containerHeight + 'px';
+    container.style.top = 'calc(50% ' + '+ ' + y_offset + 'px)';
+    container.style.height = targetContainerHeight + 'px';
+    targetEl.style.height = targetContainerHeight + 'px';
     container.style.display = 'none';
     targetEl.appendChild(fragment);
   };
