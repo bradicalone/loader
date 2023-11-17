@@ -3,8 +3,9 @@ const loader = new Loading({
     count: 8,
     circleSize: 25,
     color: '#969696',
-    width: '125px'
+    width: '250px'
 })
+
 
 document.getElementById('btn-loader').onclick = function () {
     loader.initRotate()

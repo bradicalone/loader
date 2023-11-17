@@ -9,10 +9,10 @@
 */
 function Loading(data) {
     const { containerElement, count=5, circleSize, color, width } = data
+
     this.size = (Number(circleSize) || Number(circleSize?.replace(/[^0-9]/g, ''))) || containerElement.offsetWidth / 2 / count
     this.width = (Number(width) || Number(width?.replace(/[^0-9]/g, ''))) || containerElement.offsetWidth / 2
-    const targetEl = containerElement
-    const targetChildren = Array.from(targetEl?.childNodes)
+    const targetChildren = Array.from(containerElement?.childNodes)
     const fragment = document.createDocumentFragment();
     const scaleDifference = .5 // Size of the circle scaling down to
     // If target element has text instead of element 
@@ -72,7 +72,7 @@ function Loading(data) {
 
     // 1st Creates the elements and adds necessary styles on page load (Helps with animation rendering)
     const createFragment = () => {
-        const style = window.getComputedStyle(targetEl);
+        const style = window.getComputedStyle(containerElement);
         const extraSizingWidth = ['padding-left', 'padding-right', 'border-left', 'border-right']
         .map((key) => parseInt(style.getPropertyValue(key), 10) || 0)
         .reduce((prev, cur) => prev + cur);
@@ -81,8 +81,8 @@ function Loading(data) {
         .map((key) => parseInt(style.getPropertyValue(key), 10) || 0)
         .reduce((prev, cur) => prev + cur);
 
-        const containerWidth = targetEl.getBoundingClientRect().width - extraSizingWidth
-        const targetContainerHeight = targetEl.getBoundingClientRect().height 
+        const containerWidth = containerElement.getBoundingClientRect().width - extraSizingWidth
+        const targetContainerHeight = containerElement.getBoundingClientRect().height 
         const circleWidth =  this.size || containerWidth / (count + 2)
 
         const halfHeight = targetContainerHeight/2 
@@ -112,9 +112,9 @@ function Loading(data) {
         fragment.appendChild(container)
         container.style.top = 'calc(50% ' + '+ ' + y_offset +'px)'
         container.style.height = targetContainerHeight +'px'
-        targetEl.style.height = targetContainerHeight +'px'
+        containerElement.style.height = targetContainerHeight +'px'
         container.style.display = 'none'
-        targetEl.appendChild(fragment)
+        containerElement.appendChild(fragment)
     }
     createFragment()
 }

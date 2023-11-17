@@ -4,12 +4,13 @@
 * bring in the stylesheet.css
 * Or use both from cdn link:
 ```
-    <script src="https://cdn.jsdelivr.net/gh/bradicalone/loader@1.2.0/dist/index.min.js"></script> 
+    <script src="https://cdn.jsdelivr.net/gh/bradicalone/loader@1.2.0/dist/index.js"></script> 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bradicalone/loader@0.1.5/dist/stylesheet.css">
 ```
 ## Usage
 
-This exposes `Loading` by default. To make it ready for use, you need to initialize the Constructor to use it's methods:
+This exposes `Loading` by default. To make it ready for use, you need to initialize the Constructor to use it's methods to start and stop.
+** Make sure to add the element that is going to use the loading animation. **
 
 ```javascript
 /**
@@ -36,6 +37,8 @@ document.getElementById('btn-loader-stop').onclick = function () {
     // Stop the animation loader on another click event or possibly when page is done loading
     loader.clearRotation()
 }
+
+* Another example:
 
 /**
 * @param {Object} data Information about the loader.
